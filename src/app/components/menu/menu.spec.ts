@@ -19,4 +19,12 @@ describe('Menu', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should show only pictures from the selected category', () => {
+    component.selectCategory('PIZZA');
+
+    expect(component.filteredPictures()).toEqual([
+      { category: 'PIZZA', image: '/images/pizza-1.jpg', name: 'Pizza' },
+    ]);
+  });
 });

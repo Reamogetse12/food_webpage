@@ -73,6 +73,12 @@
     border-radius: 999px;
 }
 
+.cart-controls .remove-button {
+    width: auto;
+    padding: 0 10px;
+    border-radius: 8px;
+}
+
 .cart-summary {
     width: min(100%, 330px);
     background: white;
@@ -103,9 +109,9 @@
     width: 100%;
     padding: 14px;
     margin-top: 20px;
-    background: var(--accent);
+    background: red;
     color: white;
-    border: 1px solid var(--accent);
+    border: 1px solid red;
     cursor: pointer;
 }
 

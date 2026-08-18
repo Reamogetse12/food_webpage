@@ -6,13 +6,9 @@
         </h2>
         
         <div class="buttons">
-        <button type="button" [class.active]="selectedCategory() === 'ALL'" (click)="selectCategory('ALL')">ALL</button>
-        <button type="button" [class.active]="selectedCategory() === 'BURGERS'" (click)="selectCategory('BURGERS')">BURGERS</button>
-        <button type="button" [class.active]="selectedCategory() === 'PIZZA'" (click)="selectCategory('PIZZA')">PIZZA</button>
-        <button type="button" [class.active]="selectedCategory() === 'CHICKEN'" (click)="selectCategory('CHICKEN')">CHICKEN</button>
-        <button type="button" [class.active]="selectedCategory() === 'WRAPS'" (click)="selectCategory('WRAPS')">WRAPS</button>
-        <button type="button" [class.active]="selectedCategory() === 'DESSERTS'" (click)="selectCategory('DESSERTS')">DESSERTS</button>
-        <button type="button" [class.active]="selectedCategory() === 'PASTA'" (click)="selectCategory('PASTA')">PASTA</button>
+        @for (category of categories; track category) {
+            <button type="button" [class.active]="selectedCategory() === category" (click)="selectCategory(category)">{{ category }}</button>
+        }
         </div>
         <br>
         <div class="pictures">
@@ -31,47 +27,14 @@
         </h2>
         <p>Choose your favorites from our kitchen and get them fresh, hot, and delivered fast.</p>
         <div class="ordering-menu">
-            <article class="order-item">
-                <img src="/images/burger.jpg" alt="Sarab Classic Burger" class="order-picture" width="180px">
-                <h3>D'LICIOUS Classic Burger</h3>
-                <p>Double smash patty, cheddar, pickles, house sauce, brioche bun.</p>
-                <span class="price">R 80.90</span>
-                <button type="button" class="order-button" (click)="addToOrder('burger', 'D\'LICIOUS Classic Burger', 80.90, '/images/burger.jpg')">{{ isAdded('burger') ? 'Added (' + quantityFor('burger') + ')' : 'Add to Order' }}</button>
-            </article>
-            <article class="order-item">
-                <img src="/images/chicken.webp" alt="Firehouse Chicken" class="order-picture" width="180px">
-                <h3>Firehouse Chicken</h3>
-                <p>Crispy chicken, fries, chili mayo, fresh herbs, and garden slaw.</p>
-                <span class="price">R 85.50</span>
-                <button type="button" class="order-button" (click)="addToOrder('chicken', 'Firehouse Chicken', 85.50, '/images/chicken.webp')">{{ isAdded('chicken') ? 'Added (' + quantityFor('chicken') + ')' : 'Add to Order' }}</button>
-            </article>
-            <article class="order-item">
-                <img src="/images/pizza-1.jpg" alt="Chef's Margherita Pizza" class="order-picture" width="180px">
-                <h3>Chef's Margherita Pizza</h3>
-                <p>Wood-fired tomato sauce, mozzarella, basil, and olive oil.</p>
-                <span class="price">R 120.20</span>
-                <button type="button" class="order-button" (click)="addToOrder('pizza', 'Chef\'s Margherita Pizza', 120.20, '/images/pizza-1.jpg')">{{ isAdded('pizza') ? 'Added (' + quantityFor('pizza') + ')' : 'Add to Order' }}</button>
-            </article>
-            <article class="order-item">
-                <img src="/images/wrap.webp" alt="Chicken Wrap" class="order-picture" width="180px">
-                <h3>Chicken Wrap</h3>
-                <p>Grilled chicken, peppers, lettuce, ranch, and toasted tortilla.</p>
-                <span class="price">R 70.75</span>
-                <button type="button" class="order-button" (click)="addToOrder('wrap', 'Chicken Wrap', 70.75, '/images/wrap.webp')">{{ isAdded('wrap') ? 'Added (' + quantityFor('wrap') + ')' : 'Add to Order' }}</button>
-            </article>
-            <article class="order-item">
-                <img src="/images/pasta.jpg" alt="Truffle Pasta" class="order-picture" width="180px">
-                <h3>Truffle Pasta</h3>
-                <p>Fresh pasta ribbons, parmesan, mushrooms, herbs, and cream sauce.</p>
-                <span class="price">R 135.40</span>
-                <button type="button" class="order-button" (click)="addToOrder('pasta', 'Truffle Pasta', 135.40, '/images/pasta.jpg')">{{ isAdded('pasta') ? 'Added (' + quantityFor('pasta') + ')' : 'Add to Order' }}</button>
-            </article>
-            <article class="order-item">
-                <img src="/images/cupcake.jpg" alt="Sweet Finish Cupcake" class="order-picture" width="180px">
-                <h3>Sweet Finish Cupcake</h3>
-                <p>Soft vanilla sponge, cream frosting, chocolate drizzle.</p>
-                <span class="price">R 45.20</span>
-                <button type="button" class="order-button" (click)="addToOrder('cupcake', 'Sweet Finish Cupcake', 45.20, '/images/cupcake.jpg')">{{ isAdded('cupcake') ? 'Added (' + quantityFor('cupcake') + ')' : 'Add to Order' }}</button>
-            </article>
+            @for (product of products; track product.id) {
+                <article class="order-item">
+                    <img [src]="product.image" alt="{{ product.name }}" title="{{ product.name }}" class="order-picture" width="180">
+                    <h3>{{ product.name }}</h3>
+                    <p>{{ product.description }}</p>
+                    <span class="price">R {{ product.price.toFixed(2) }}</span>
+                    <button type="button" class="order-button" (click)="addToOrder(product)">{{ isAdded(product.id) ? 'Added (' + quantityFor(product.id) + ')' : 'Add to Order' }}</button>
+                </article>
+            }
         </div>
     </section>

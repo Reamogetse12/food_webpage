@@ -1,0 +1,115 @@
+#cart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(48px, 8vw, 100px);
+    background: linear-gradient(180deg, #fffdfb, #fffaf7);
+}
+
+.cart-wrapper {
+    width: min(100%, 1100px);
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    align-items: flex-start;
+}
+
+.cart-items {
+    flex: 1;
+}
+
+.cart-items.empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 130px;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px dashed #d9cfc7;
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.empty-cart-message {
+    margin: 0;
+    color: #6f625d;
+    font-size: 1.05rem;
+    text-align: center;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 18px;
+    background: white;
+    border-radius: 16px;
+    border: 1px solid #eee;
+    margin-bottom: 16px;
+    text-align: left;
+}
+
+.cart-item img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.cart-details {
+    flex: 1;
+}
+
+.cart-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cart-controls button {
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border-radius: 999px;
+}
+
+.cart-summary {
+    width: min(100%, 330px);
+    background: white;
+    border-radius: 20px;
+    padding: 24px;
+    border: 1px solid var(--line);
+    box-shadow: 0 10px 24px rgba(0,0,0,.05);
+    text-align: left;
+}
+
+.cart-summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.subtotal-row.hidden {
+    display: none;
+}
+
+.total-row {
+    font-weight: 800;
+    color: var(--accent-dark);
+}
+
+.checkout-button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 20px;
+    background: var(--accent);
+    color: white;
+    border: 1px solid var(--accent);
+    cursor: pointer;
+}
+
+.checkout-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

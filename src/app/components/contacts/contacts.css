@@ -1,9 +1,16 @@
 #contacts{
+    background-color: antiquewhite;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: clamp(48px, 8vw, 100px);
+}
+h2{
+    font-style: oblique;
+}
+.red{
+    color: red;
 }
 .contact-us{
     display: flex;
@@ -19,8 +26,6 @@ form{
     background-color: white;
     padding: 24px;
     margin: 0 auto;
-    text-align: left;
-    box-shadow: 0 12px 35px rgba(55, 29, 16, 0.08);
 
 }
 form label{

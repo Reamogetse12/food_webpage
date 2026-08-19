@@ -1,43 +1,29 @@
 
 #our-story{
+    background-color: antiquewhite;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     padding: 180px;
     gap: 10px;
 }
-.title{
-    font-style: oblique;
-    font-size: 20px;
-    text-align: center;
-    color: red;
-}
+
 h2 {
-    font-family: 'Playfair Display';
-    font-size: clamp(34px, 4.2vw, 45px);
+    font-size: 45px;
     line-height: 1.08;
-    margin: 0px;
-    color: var(--ink);
+    margin: 0;
 }
-
-h3 {
-    color: var(--ink-soft);
-}
-
-h4,
-h5 {
-    color: var(--ink-soft);
+.red{
+    color: red;
 }
 
 .title {
     font-style: oblique;
     font-size: 20px;
-    text-align: center;
-    color: var(--accent);
+    color: red;
     font-weight: 700;
     letter-spacing: 1px;
-    text-transform: uppercase;
+
 }
 .story{
     display: flex;
@@ -46,30 +32,17 @@ h5 {
     align-items: center;
     gap: 50px;
 }
-.story-pictures{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+
 .story-pictures img{
     width: 100%;
     border-radius: 20px;
-    position: relative;
-    object-fit: cover;
 }
 .story-text{
     display: block;
-    border: 1px solid white;
     padding: 20px;
-    width: min(100%, 750px);
-    box-shadow: 5px;
-    text-align: left;
+    width:  750px;
 }
-.story-text button{
-    background-color: red;
-    color: white;
-    font-weight: bold;
-}
+
 .story p{
     font-size: 15px;
 }

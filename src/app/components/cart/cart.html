@@ -1,54 +1,37 @@
 <section id="cart">
-        <span class="title">Your Cart</span>
-        <h2>
-            Review Your
-            <span class="red">Order</span>
-        </h2>
-        <div class="cart-wrapper">
-            <div class="cart-items" aria-live="polite">
-                @if (items().length === 0) {
-                    <div class="cart-items empty">
-                        <p class="empty-cart-message">Your cart is empty. Add something delicious to get started.</p>
+    <h1 class="title">Your Cart</h1>
+    <div class="cart-layout">
+        <div class="cart-box">
+            <h2>Cart ({{ count() }})</h2>
+            @if (items().length === 0) {
+                <p>Cart is empty</p>
+            }
+            @for (item of items(); track item.id) {
+                <div class="cart-item">
+                    <img [src]="item.image" [alt]="item.name" title="{{ item.name }}" width="50">
+                    <span>{{ item.name }}</span>
+                    <div class="qty">
+                        <button type="button" (click)="decrease(item.id, item.quantity)" [attr.aria-label]="'Decrease ' + item.name">-</button>
+                        <span>{{ item.quantity }}</span>
+                        <button type="button" (click)="increase(item.id, item.quantity)" [attr.aria-label]="'Increase ' + item.name">+</button>
                     </div>
-                }
-                @for (item of items(); track item.id) {
-                    <article class="cart-item">
-                        <img [src]="item.image" alt="{{ item.name }}" title="{{ item.name }}">
-                        <div class="cart-details">
-                            <h3>{{ item.name }}</h3>
-                            <p>R {{ item.price.toFixed(2) }} each</p>
-                        </div>
-                        <div class="cart-controls">
-                            <button type="button" (click)="decrease(item.id, item.quantity)" [attr.aria-label]="'Decrease ' + item.name">-</button>
-                            <strong>{{ item.quantity }}</strong>
-                            <button type="button" (click)="increase(item.id, item.quantity)" [attr.aria-label]="'Increase ' + item.name">+</button>
-                            <button type="button" class="remove-button" (click)="remove(item.id)" [attr.aria-label]="'Remove ' + item.name">Remove</button>
-                        </div>
-                    </article>
-                }
-            </div>
-            <aside class="cart-summary">
-                <h3>Cart Summary</h3>
-                <div class="cart-summary-row">
-                    <span>Subtotal</span>
-                    <span class="cart-subtotal">R {{ subtotal().toFixed(2) }}</span>
+                    <span>R{{ (item.price * item.quantity).toFixed(2) }}</span>
+                    <button type="button" class="remove" (click)="remove(item.id)" [attr.aria-label]="'Remove ' + item.name">x</button>
                 </div>
-                <div class="cart-summary-row">
-                    <span>Delivery</span>
-                    <span class="delivery-fee">R {{ deliveryFee().toFixed(2) }}</span>
-                </div>
-                <div class="cart-summary-row">
-                    <span>Tax</span>
-                    <span>R {{ tax().toFixed(2) }}</span>
-                </div>
-                <div class="cart-summary-row total-row">
-                    <span>Total</span>
-                    <span class="cart-total">R {{ total().toFixed(2) }}</span>
-                </div>
-                <button class="checkout-button" type="button" (click)="checkout()" [disabled]="items().length === 0">Checkout</button>
-                @if (checkoutMessage()) {
-                    <p aria-live="polite">{{ checkoutMessage() }}</p>
-                }
-            </aside>
+            }
         </div>
-    </section>
+
+        <div class="checkout-box">
+            <h2>Checkout</h2>
+            <div class="checkout-summary">
+                <p><span>Subtotal</span><span>R{{ subtotal().toFixed(2) }}</span></p>
+                <p><span>Delivery fee</span><span>R{{ deliveryFee().toFixed(2) }}</span></p>
+                <h3><span>Total</span><span>R{{ total().toFixed(2) }}</span></h3>
+            </div>
+            <button type="button" class="checkout-btn" (click)="checkout()" [disabled]="items().length === 0">Checkout</button>
+            @if (checkoutMessage()) {
+                <p class="checkout-message" >{{ checkoutMessage() }}</p>
+            }
+        </div>
+    </div>
+</section>

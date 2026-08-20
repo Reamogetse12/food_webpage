@@ -106,3 +106,8 @@ button.active {
     padding: 10px 20px;
     border-radius: 18px;
 }
+.order-button:hover{
+    color: red;
+    border-color: red;
+    background-color: white;
+}

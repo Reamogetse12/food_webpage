@@ -1,5 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { CartItem, CartService } from '../../shared/cart.service';
+import { CartService } from '../../shared/cart.service';
 
 @Component({
   selector: 'app-cart',
@@ -8,13 +8,14 @@ import { CartItem, CartService } from '../../shared/cart.service';
   styleUrl: './cart.css',
 })
 export class Cart {
-  private readonly cartService = inject(CartService);
-  readonly items = this.cartService.items;
-  readonly subtotal = this.cartService.subtotal;
-  readonly deliveryFee = computed(() => this.subtotal() ? 25 : 0);
-  readonly tax = computed(() => this.subtotal() * 0.15);
-  readonly total = computed(() => this.subtotal() + this.deliveryFee() + this.tax());
-  readonly checkoutMessage = signal('');
+  cartService = inject(CartService);
+  items = this.cartService.items;
+  count = computed(() => this.items().reduce((total, item) => total + item.quantity, 0));
+  subtotal = this.cartService.subtotal;
+  deliveryFee = computed(() => this.subtotal() ? 25 : 0);
+  tax = computed(() => this.subtotal() * 0.15);
+  total = computed(() => this.subtotal() + this.deliveryFee() + this.tax());
+  checkoutMessage = signal('');
 
   increase(itemId: string, quantity: number): void {
     this.cartService.updateQuantity(itemId, quantity + 1);

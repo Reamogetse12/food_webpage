@@ -1,0 +1,261 @@
+.cart-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 200;
+}
+
+.cart-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100dvh;
+    width: 420px;
+    max-width: 100vw;
+    background: white;
+    box-shadow: -4px 0 24px rgba(0, 0, 0, 0.15);
+    z-index: 201;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+}
+
+.cart-drawer.open {
+    transform: translateX(0);
+}
+
+/* Header */
+.drawer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid #eee;
+}
+
+.drawer-header h2 {
+    margin: 0;
+    font-size: 22px;
+}
+
+.close-btn {
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #555;
+    line-height: 1;
+    padding: 4px;
+}
+
+.close-btn:hover {
+    color: red;
+}
+
+/* Body — scrollable item list */
+.drawer-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 24px;
+}
+
+.empty {
+    color: #888;
+    text-align: center;
+    margin-top: 40px;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.cart-item img {
+    width: 56px;
+    height: 56px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+
+.item-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.item-name {
+    font-weight: 600;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.item-price {
+    color: red;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.qty {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.qty button,
+.remove {
+    display: grid;
+    width: 30px;
+    height: 30px;
+    place-items: center;
+    padding: 0;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.qty button:hover,
+.remove:hover {
+    border-color: red;
+    color: red;
+}
+
+.remove {
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+/* Footer — summary + checkout */
+.drawer-footer {
+    padding: 20px 24px;
+    border-top: 1px solid #eee;
+    background: #fafafa;
+}
+
+.checkout-summary p,
+.checkout-summary h3 {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 0;
+    padding: 6px 0;
+}
+
+.checkout-summary p {
+    color: #666;
+    font-size: 14px;
+}
+
+.checkout-summary h3 {
+    font-size: 18px;
+    margin-top: 10px;
+    padding-top: 12px;
+    border-top: 1px solid #ddd;
+}
+
+.checkout-btn {
+    width: 100%;
+    padding: 14px;
+    color: white;
+    background: red;
+    border: 1px solid red;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 14px;
+}
+
+.checkout-btn:hover:not(:disabled) {
+    background: white;
+    color: red;
+}
+
+.checkout-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+}
+
+.checkout-message {
+    margin-top: 12px;
+    font-size: 14px;
+    color: green;
+    font-weight: 600;
+    text-align: center;
+}
+
+.item-extras {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin: 2px 0;
+}
+
+.extra-tag {
+    font-size: 11px;
+    background: #fde8e8;
+    color: #b00;
+    border-radius: 20px;
+    padding: 2px 8px;
+    font-weight: 600;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.user-pill {
+    font-size: 13px;
+    font-weight: 600;
+    color: #444;
+    background: #f5f5f5;
+    border-radius: 20px;
+    padding: 4px 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 120px;
+}
+
+.logout-btn {
+    background: transparent;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #888;
+    padding: 4px 8px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.logout-btn:hover {
+    border-color: red;
+    color: red;
+}
+
+.checkout-error {
+    margin-top: 10px;
+    font-size: 13px;
+    color: #b91c1c;
+    font-weight: 600;
+    text-align: center;
+    background: #fff0f0;
+    border: 1px solid #fca5a5;
+    border-radius: 6px;
+    padding: 8px 12px;
+}

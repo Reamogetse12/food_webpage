@@ -1,0 +1,70 @@
+<section id="our-menu">
+        <span class="title">What's Cooking</span>
+        <h2>
+            Our Delicious
+             <span class="red">Menu</span>
+        </h2>
+        
+        <div class="buttons">
+        @for (category of categories; track category) {
+            <button type="button" [class.active]="selectedCategory() === category" (click)="selectCategory(category)">{{ category }}</button>
+        }
+        </div>
+        <br>
+        <div class="pictures">
+        @for (picture of filteredPictures(); track picture.image) {
+            <img [src]="picture.image" alt="{{ picture.name }}" title="{{ picture.name }}" width="180">
+        }
+        </div>
+        <br>
+        <button type="button" class="view-menu" (click)="viewFullMenu()">View Full Menu</button>
+    </section>
+    <section id="ordering-menu">
+        <span class="title">Order Online</span>
+        <h2>
+            Ready to
+            <span class="red">Order?</span>
+        </h2>
+        <p>Choose your favorites from our kitchen and get them fresh, hot, and delivered fast.</p>
+        <div class="ordering-menu">
+            @for (product of products; track product.id) {
+                <article class="order-item">
+                    <img [src]="product.image" alt="{{ product.name }}" title="{{ product.name }}" class="order-picture" width="180">
+                    <h3>{{ product.name }}</h3>
+                    <p>{{ product.description }}</p>
+                    <span class="price">R {{ product.price.toFixed(2) }}</span>
+                    @if (isAdded(product.id)) {
+                        <div class="qty-controls">
+                            <button type="button" class="qty-btn" (click)="decrease(product)" [attr.aria-label]="'Decrease ' + product.name">−</button>
+                            <span class="qty-value">{{ quantityFor(product.id) }}</span>
+                            <button type="button" class="qty-btn" (click)="addToOrder(product)" [attr.aria-label]="'Increase ' + product.name">+</button>
+                        </div>
+                        <button type="button" class="customize-btn" (click)="toggleExtras(product.id)">
+                            {{ openExtrasId() === product.id ? 'Done' : '✦ Customize' }}
+                        </button>
+                        @if (openExtrasId() === product.id) {
+                            <div class="extras-panel">
+                                <p class="extras-title">Add extras</p>
+                                @for (extra of product.availableExtras; track extra.id) {
+                                    <label class="extra-option" [class.selected]="isExtraSelected(product.id, extra.id)">
+                                        <input
+                                            type="checkbox"
+                                            [checked]="isExtraSelected(product.id, extra.id)"
+                                            (change)="toggleExtra(product, extra)"
+                                        >
+                                        <span class="extra-name">{{ extra.name }}</span>
+                                        <span class="extra-price">+R{{ extra.price.toFixed(2) }}</span>
+                                    </label>
+                                }
+                                @if (extrasTotal(product.id) > 0) {
+                                    <p class="extras-subtotal">Extras: +R{{ extrasTotal(product.id).toFixed(2) }}</p>
+                                }
+                            </div>
+                        }
+                    } @else {
+                        <button type="button" class="order-button" (click)="addToOrder(product)">Add to Order</button>
+                    }
+                </article>
+            }
+        </div>
+    </section>

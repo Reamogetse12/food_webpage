@@ -1,0 +1,72 @@
+<!-- Login modal — sits inside the cart component so ViewChild resolves -->
+<app-login-modal (authenticated)="onAuthenticated()"></app-login-modal>
+
+<!-- Payment page — full-screen overlay, opened after auth -->
+<app-payment (orderPlaced)="onOrderPlaced()"></app-payment>
+
+@if (isOpen()) {
+    <div class="cart-backdrop" (click)="close()" aria-hidden="true"></div>
+}
+
+<aside class="cart-drawer" [class.open]="isOpen()" aria-label="Shopping cart">
+
+    <div class="drawer-header">
+        <h2>Cart ({{ count() }})</h2>
+        <div class="header-right">
+            @if (isLoggedIn()) {
+                <span class="user-pill">👤 {{ user()?.name }}</span>
+                <button type="button" class="logout-btn" (click)="logout()">Log out</button>
+            }
+            <button type="button" class="close-btn" (click)="close()" aria-label="Close cart">✕</button>
+        </div>
+    </div>
+
+    <div class="drawer-body">
+        @if (items().length === 0) {
+            <p class="empty">Your cart is empty.</p>
+        }
+        @for (item of items(); track item.id) {
+            <div class="cart-item">
+                <img [src]="item.image" [alt]="item.name" [title]="item.name">
+                <div class="item-info">
+                    <span class="item-name">{{ item.name }}</span>
+                    @if (item.extras.length > 0) {
+                        <span class="item-extras">
+                            @for (extra of item.extras; track extra.id) {
+                                <span class="extra-tag">+ {{ extra.name }}</span>
+                            }
+                        </span>
+                    }
+                    <span class="item-price">R{{ ((item.price + extrasTotal(item)) * item.quantity).toFixed(2) }}</span>
+                </div>
+                <div class="qty">
+                    <button type="button" (click)="decrease(item.id, item.quantity)" [attr.aria-label]="'Decrease ' + item.name">−</button>
+                    <span>{{ item.quantity }}</span>
+                    <button type="button" (click)="increase(item.id, item.quantity)" [attr.aria-label]="'Increase ' + item.name">+</button>
+                </div>
+                <button type="button" class="remove" (click)="remove(item.id)" [attr.aria-label]="'Remove ' + item.name">✕</button>
+            </div>
+        }
+    </div>
+
+    <div class="drawer-footer">
+        <div class="checkout-summary">
+            <p><span>Subtotal</span><span>R{{ subtotal().toFixed(2) }}</span></p>
+            <p><span>Delivery fee</span><span>R{{ deliveryFee().toFixed(2) }}</span></p>
+            <p><span>Tax (15%)</span><span>R{{ tax().toFixed(2) }}</span></p>
+            <h3><span>Total</span><span>R{{ total().toFixed(2) }}</span></h3>
+        </div>
+
+        <button
+            type="button"
+            class="checkout-btn"
+            (click)="checkout()"
+            [disabled]="items().length === 0">
+            @if (!isLoggedIn()) {
+                Sign in to Checkout
+            } @else {
+                Proceed to Payment
+            }
+        </button>
+    </div>
+</aside>

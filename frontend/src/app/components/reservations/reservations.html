@@ -1,0 +1,53 @@
+
+    <section id="reservations">
+        <span class="title">
+            Book a Table
+        </span>
+        <br>
+        <h2>
+            Make a
+             <span class="red">
+                Reservation
+            </span>
+        </h2>
+        <br>
+    <p>Reserve your table for a memorable dining experience. We recommend booking 24 hours in advance for weekend evenings.</p>
+    <br>
+    <div class="booking">
+        <span class="info">
+        <h4>Contact Info</h4>
+        <p>We're happy to help you plan the perfect dining experience.</p>
+        <h4>Opening Hours</h4>
+        <h5>Wed - Sun, 9 AM - 11 PM</h5>
+        <h4>Call for Booking</h4>
+        <h5>+1 (800) 123-4567</h5>
+        <h4>Group Dining</h4>
+        <h5>Special menus for 10+ guests</h5>
+        <h4>Location</h4>
+        <h5>42 Flavor Street, NY</h5>
+        </span>
+
+    <form (ngSubmit)="submit()">
+        <label for="name">Full Name</label>
+        <input id="name" type="text" placeholder="Full Name" [(ngModel)]="name" name="name">
+        <label for="email">Email</label>
+        <input id="email" type="email" placeholder="Email" [(ngModel)]="email" name="email">
+        <label for="phone">Phone Number</label>
+        <input id="phone" type="tel" placeholder="Phone Number" [(ngModel)]="phone" name="phone">
+        <label for="date">Date</label>
+        <input id="date" type="date" placeholder="Date" [(ngModel)]="date" name="date">
+        <label for="time">Time</label>
+        <input id="time" type="time" placeholder="Time" [(ngModel)]="time" name="time">
+        <label for="guests">Number of Guests</label>
+        <input id="guests" type="number" placeholder="Number of Guests" [(ngModel)]="guests" name="guests">
+        <label for="requests">Special Requests</label>
+        <textarea id="requests" placeholder="Special Requests" [(ngModel)]="requests" name="requests"></textarea>
+        <button type="submit">Confirm Reservation</button>
+        @if (confirmationMessage()) {
+            <p class="confirmation-message">{{ confirmationMessage() }}</p>
+        }
+    </form>
+    </div>
+
+
+    </section>

@@ -1,0 +1,40 @@
+<section id="contacts">
+        <span class="title">Get In Touch</span>
+        <h2>
+            Contact 
+            <span class="red">Us</span>
+        </h2>
+        <p>Have a question, feedback, or want to plan a special event?We'd love to hear from you.</p>
+        <br>
+        <div class="contact-us">
+        <span class="info">
+        <h4>Contact Info</h4>
+        <p>We're happy to help you plan the perfect dining experience.</p>
+        <h4>Opening Hours</h4>
+        <h5>Wed - Sun, 9 AM - 11 PM</h5>
+        <h4>Call for Booking</h4>
+        <h5>+1 (800) 123-4567</h5>
+        <h4>Group Dining</h4>
+        <h5>Special menus for 10+ guests</h5>
+        <h4>Location</h4>
+        <h5>42 Flavor Street, NY</h5>
+        </span>
+        <form (ngSubmit)="submit()">
+        <label for="name">Full Name</label>
+        <input id="name" type="text" placeholder="Full Name" [(ngModel)]="name" name="name">
+        <label for="email">Email</label>
+        <input id="email" type="email" placeholder="Email" [(ngModel)]="email" name="email">
+        <label for="phone">Phone Number</label>
+        <input id="phone" type="tel" placeholder="Phone Number" [(ngModel)]="phone" name="phone">
+        <label for="subject">Subject</label>
+        <input id="subject" type="text" placeholder="Subject" [(ngModel)]="subject" name="subject">
+        <label for="message">Message</label>
+        <textarea id="message" placeholder="Message" [(ngModel)]="message" name="message"></textarea>
+        <br>
+        <button type="submit">Send Message</button>
+        @if (sentMessage()) {
+            <p class="sent-message">{{ sentMessage() }}</p>
+        }
+        </form>
+        </div>
+</section>

@@ -1,4 +1,4 @@
-import { Component, inject, input, output, signal } from '@angular/core';
+import { Component, computed, inject, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CartItem, CartService } from '../../shared/cart.service';
 import { AuthService } from '../../shared/auth.service';
@@ -18,6 +18,8 @@ export class Payment {
   readonly placing = signal(false);
   readonly error = signal('');
   readonly success = signal(false);
+  readonly fulfillment = signal<'delivery' | 'pickup'>('delivery');
+  readonly paymentMethod = signal<'cash' | 'bank-card'>('bank-card');
 
   readonly orderPlaced = output<void>();
 
@@ -25,9 +27,13 @@ export class Payment {
   readonly user = this.authService.user;
   readonly items = this.cartService.items;
   readonly subtotal = this.cartService.subtotal;
-  readonly deliveryFee = signal(25);
-  readonly tax = signal(0);
-  readonly total = signal(0);
+  readonly deliveryFee = computed(() =>
+    this.fulfillment() === 'delivery' && this.subtotal() > 0 ? 25 : 0,
+  );
+  readonly tax = computed(() => Number((this.subtotal() * 0.15).toFixed(2)));
+  readonly total = computed(() =>
+    Number((this.subtotal() + this.deliveryFee() + this.tax()).toFixed(2)),
+  );
 
   // form fields
   address = '';
@@ -38,12 +44,8 @@ export class Payment {
   cvv = '';
 
   open(): void {
-    const sub = this.cartService.subtotal();
-    const delivery = sub > 0 ? 25 : 0;
-    const tax = Number((sub * 0.15).toFixed(2));
-    this.deliveryFee.set(delivery);
-    this.tax.set(tax);
-    this.total.set(Number((sub + delivery + tax).toFixed(2)));
+    this.fulfillment.set('delivery');
+    this.paymentMethod.set('bank-card');
     this.address = '';
     this.city = '';
     this.cardName = '';
@@ -73,23 +75,25 @@ export class Payment {
   }
 
   async submit(): Promise<void> {
-    if (!this.address.trim() || !this.city.trim()) {
+    if (this.fulfillment() === 'delivery' && (!this.address.trim() || !this.city.trim())) {
       this.error.set('Please enter your delivery address.');
       return;
     }
-    if (!this.cardName.trim() || this.cardNumber.replace(/\s/g, '').length < 16) {
-      this.error.set('Please enter a valid card number.');
-      return;
-    }
-    if (!this.expiry || !this.cvv || this.cvv.length < 3) {
-      this.error.set('Please enter a valid expiry and CVV.');
-      return;
+    if (this.paymentMethod() === 'bank-card') {
+      if (!this.cardName.trim() || this.cardNumber.replace(/\s/g, '').length < 16) {
+        this.error.set('Please enter a valid card number.');
+        return;
+      }
+      if (!this.expiry || !this.cvv || this.cvv.length < 3) {
+        this.error.set('Please enter a valid expiry and CVV.');
+        return;
+      }
     }
 
     this.placing.set(true);
     this.error.set('');
     try {
-      await this.authService.placeOrder(this.items());
+      await this.authService.placeOrder(this.items(), this.fulfillment());
       this.success.set(true);
       this.cartService.clear();
       // auto-close after 2.5 s

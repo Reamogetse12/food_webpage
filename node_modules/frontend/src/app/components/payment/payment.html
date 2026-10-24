@@ -18,8 +18,13 @@
         <div class="success-screen">
             <div class="success-icon">✓</div>
             <h2>Order Placed!</h2>
-            <p>Thanks <strong>{{ user()?.name }}</strong>, your order is being prepared.</p>
-            <p class="success-total">Total charged: <strong>R{{ total().toFixed(2) }}</strong></p>
+            <p>Thanks <strong>{{ user()?.name }}</strong>, your order is being prepared for {{ fulfillment() }}.</p>
+            <p class="success-message">
+                {{ paymentMethod() === 'cash'
+                    ? 'Please pay cash when you ' + (fulfillment() === 'delivery' ? 'receive your delivery.' : 'collect your order.')
+                    : 'Your bank card is the selected payment method.' }}
+            </p>
+            <p class="success-total">Order total: <strong>R{{ total().toFixed(2) }}</strong></p>
         </div>
     } @else {
 
@@ -50,67 +55,110 @@
 
             <div class="order-totals">
                 <p><span>Subtotal</span><span>R{{ subtotal().toFixed(2) }}</span></p>
-                <p><span>Delivery</span><span>R{{ deliveryFee().toFixed(2) }}</span></p>
+                <p>
+                    <span>{{ fulfillment() === 'delivery' ? 'Delivery fee' : 'Pickup' }}</span>
+                    <span>R{{ deliveryFee().toFixed(2) }}</span>
+                </p>
                 <p><span>Tax (15%)</span><span>R{{ tax().toFixed(2) }}</span></p>
                 <h3><span>Total</span><span>R{{ total().toFixed(2) }}</span></h3>
             </div>
         </section>
 
-        <!-- ── Delivery address ──────────────────────────── -->
+        <!-- ── Fulfillment and address ───────────────────── -->
         <section class="pay-section">
-            <h2 class="section-title">📍 Delivery Address</h2>
+            <h2 class="section-title">📦 How would you like your order?</h2>
             <form class="pay-form" (ngSubmit)="submit()">
-                <div class="form-row">
-                    <label for="address">Street Address</label>
-                    <input id="address" type="text" placeholder="42 Flavor Street"
-                        [(ngModel)]="address" name="address" autocomplete="street-address">
+                <div class="fulfillment-options" role="radiogroup" aria-label="Order fulfillment">
+                    <label class="fulfillment-option" [class.selected]="fulfillment() === 'delivery'">
+                        <input type="radio" name="fulfillment" value="delivery"
+                            [checked]="fulfillment() === 'delivery'"
+                            (change)="fulfillment.set('delivery')">
+                        <span>Delivery</span>
+                        <small>Delivered to your address</small>
+                    </label>
+                    <label class="fulfillment-option" [class.selected]="fulfillment() === 'pickup'">
+                        <input type="radio" name="fulfillment" value="pickup"
+                            [checked]="fulfillment() === 'pickup'"
+                            (change)="fulfillment.set('pickup')">
+                        <span>Pickup</span>
+                        <small>Collect your order</small>
+                    </label>
                 </div>
-                <div class="form-row">
-                    <label for="city">City</label>
-                    <input id="city" type="text" placeholder="New York"
-                        [(ngModel)]="city" name="city" autocomplete="address-level2">
-                </div>
+
+                @if (fulfillment() === 'delivery') {
+                    <h2 class="section-title">📍 Delivery Address</h2>
+                    <div class="form-row">
+                        <label for="address">Street Address</label>
+                        <input id="address" type="text" placeholder="42 Flavor Street"
+                            [(ngModel)]="address" name="address" autocomplete="street-address">
+                    </div>
+                    <div class="form-row">
+                        <label for="city">City</label>
+                        <input id="city" type="text" placeholder="New York"
+                            [(ngModel)]="city" name="city" autocomplete="address-level2">
+                    </div>
+                }
 
                 <!-- ── Payment details ───────────────────── -->
-                <h2 class="section-title" style="margin-top: 24px">💳 Payment Details</h2>
-
-                <div class="form-row">
-                    <label for="cardName">Name on Card</label>
-                    <input id="cardName" type="text" placeholder="John Doe"
-                        [(ngModel)]="cardName" name="cardName" autocomplete="cc-name">
+                <h2 class="section-title" style="margin-top: 24px">💳 Payment Method</h2>
+                <div class="fulfillment-options" role="radiogroup" aria-label="Payment method">
+                    <label class="fulfillment-option" [class.selected]="paymentMethod() === 'bank-card'">
+                        <input type="radio" name="paymentMethod" value="bank-card"
+                            [checked]="paymentMethod() === 'bank-card'"
+                            (change)="paymentMethod.set('bank-card')">
+                        <span>Bank card</span>
+                    </label>
+                    <label class="fulfillment-option" [class.selected]="paymentMethod() === 'cash'">
+                        <input type="radio" name="paymentMethod" value="cash"
+                            [checked]="paymentMethod() === 'cash'"
+                            (change)="paymentMethod.set('cash')">
+                        <span>Cash</span>
+                    </label>
                 </div>
 
-                <div class="form-row">
-                    <label for="cardNumber">Card Number</label>
-                    <input id="cardNumber" type="text" placeholder="1234 5678 9012 3456"
-                        [value]="cardNumber"
-                        (input)="formatCard($any($event.target).value)"
-                        name="cardNumber"
-                        maxlength="19"
-                        autocomplete="cc-number"
-                        inputmode="numeric">
-                </div>
-
-                <div class="form-two-col">
+                @if (paymentMethod() === 'cash') {
+                    <p class="payment-message" role="status">
+                        Pay cash when your order is delivered or when you collect it. No card details are needed.
+                    </p>
+                } @else {
                     <div class="form-row">
-                        <label for="expiry">Expiry</label>
-                        <input id="expiry" type="text" placeholder="MM/YY"
-                            [value]="expiry"
-                            (input)="formatExpiry($any($event.target).value)"
-                            name="expiry"
-                            maxlength="5"
-                            autocomplete="cc-exp"
+                        <label for="cardName">Name on Card</label>
+                        <input id="cardName" type="text" placeholder="John Doe"
+                            [(ngModel)]="cardName" name="cardName" autocomplete="cc-name">
+                    </div>
+
+                    <div class="form-row">
+                        <label for="cardNumber">Card Number</label>
+                        <input id="cardNumber" type="text" placeholder="1234 5678 9012 3456"
+                            [value]="cardNumber"
+                            (input)="formatCard($any($event.target).value)"
+                            name="cardNumber"
+                            maxlength="19"
+                            autocomplete="cc-number"
                             inputmode="numeric">
                     </div>
-                    <div class="form-row">
-                        <label for="cvv">CVV</label>
-                        <input id="cvv" type="password" placeholder="•••"
-                            [(ngModel)]="cvv" name="cvv"
-                            maxlength="4"
-                            autocomplete="cc-csc"
-                            inputmode="numeric">
+
+                    <div class="form-two-col">
+                        <div class="form-row">
+                            <label for="expiry">Expiry</label>
+                            <input id="expiry" type="text" placeholder="MM/YY"
+                                [value]="expiry"
+                                (input)="formatExpiry($any($event.target).value)"
+                                name="expiry"
+                                maxlength="5"
+                                autocomplete="cc-exp"
+                                inputmode="numeric">
+                        </div>
+                        <div class="form-row">
+                            <label for="cvv">CVV</label>
+                            <input id="cvv" type="password" placeholder="•••"
+                                [(ngModel)]="cvv" name="cvv"
+                                maxlength="4"
+                                autocomplete="cc-csc"
+                                inputmode="numeric">
+                        </div>
                     </div>
-                </div>
+                }
 
                 @if (error()) {
                     <p class="pay-error" role="alert">{{ error() }}</p>
@@ -118,6 +166,7 @@
 
                 <button type="submit" class="pay-btn" [disabled]="placing() || items().length === 0">
                     @if (placing()) { Processing… }
+                    @else if (paymentMethod() === 'cash') { Place Order · Cash }
                     @else { Pay R{{ total().toFixed(2) }} }
                 </button>
             </form>

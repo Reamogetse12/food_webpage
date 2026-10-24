@@ -47,14 +47,14 @@ export class AuthService {
     this.persist(body.token, body.user);
   }
 
-  async placeOrder(items: unknown[]): Promise<unknown> {
+  async placeOrder(items: unknown[], fulfillment: 'delivery' | 'pickup'): Promise<unknown> {
     const res = await fetch(`${API}/orders`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${this._token()}`,
       },
-      body: JSON.stringify({ items }),
+      body: JSON.stringify({ items, fulfillment }),
     });
     const body = await res.json();
     if (!res.ok) throw new Error(body.error ?? 'Order failed');

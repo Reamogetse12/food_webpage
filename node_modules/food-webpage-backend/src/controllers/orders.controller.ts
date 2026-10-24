@@ -12,7 +12,11 @@ interface OrderRow extends RowDataPacket {
 }
 
 function parseOrder(row: OrderRow) {
-  return { ...row, items: JSON.parse(row.items) };
+  return {
+    ...row,
+    fulfillment: row.delivery > 0 ? 'delivery' : 'pickup',
+    items: JSON.parse(row.items),
+  };
 }
 
 // GET /api/orders
@@ -50,10 +54,17 @@ export async function getOrderById(req: Request, res: Response): Promise<void> {
 
 // POST /api/orders
 export async function createOrder(req: Request, res: Response): Promise<void> {
-  const { items } = req.body as { items: OrderItem[] };
+  const { items, fulfillment = 'delivery' } = req.body as {
+    items: OrderItem[];
+    fulfillment?: string;
+  };
 
   if (!Array.isArray(items) || items.length === 0) {
     res.status(400).json({ error: 'Order must contain at least one item' });
+    return;
+  }
+  if (fulfillment !== 'delivery' && fulfillment !== 'pickup') {
+    res.status(400).json({ error: 'Fulfillment must be delivery or pickup' });
     return;
   }
   for (const item of items) {
@@ -68,7 +79,7 @@ export async function createOrder(req: Request, res: Response): Promise<void> {
     return sum + (item.price + extrasTotal) * item.quantity;
   }, 0);
 
-  const delivery = subtotal > 0 ? 25 : 0;
+  const delivery = fulfillment === 'delivery' && subtotal > 0 ? 25 : 0;
   const tax      = Number((subtotal * 0.15).toFixed(2));
   const total    = Number((subtotal + delivery + tax).toFixed(2));
 

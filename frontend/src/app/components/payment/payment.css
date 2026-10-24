@@ -21,7 +21,6 @@
     to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── Header ─────────────────────────────────────────────── */
 .pay-header {
     display: flex;
     align-items: center;
@@ -61,7 +60,6 @@
 
 .pay-close:hover { color: red; }
 
-/* ── Body ───────────────────────────────────────────────── */
 .pay-body {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -77,7 +75,6 @@
     .pay-body { grid-template-columns: 1fr; }
 }
 
-/* ── Sections ───────────────────────────────────────────── */
 .pay-section {
     background: white;
     border-radius: 16px;
@@ -92,7 +89,30 @@
     color: #222;
 }
 
-/* ── Order items ────────────────────────────────────────── */
+.fulfillment-options {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.fulfillment-option {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.fulfillment-option.selected {
+    border-color: red;
+}
+
+.fulfillment-option small {
+    display: block;
+    color: #666;
+    margin-top: 4px;
+}
+
 .order-items {
     display: flex;
     flex-direction: column;
@@ -160,7 +180,6 @@
     text-align: right;
 }
 
-/* ── Totals ─────────────────────────────────────────────── */
 .order-totals {
     border-top: 1px solid #eee;
     padding-top: 14px;
@@ -183,7 +202,6 @@
     border-top: 1px solid #ddd;
 }
 
-/* ── Form ───────────────────────────────────────────────── */
 .pay-form {
     display: flex;
     flex-direction: column;
@@ -229,7 +247,6 @@
 
 .form-two-col .form-row { margin-bottom: 0; }
 
-/* ── Error ──────────────────────────────────────────────── */
 .pay-error {
     background: #fff0f0;
     border: 1px solid #fca5a5;
@@ -241,7 +258,6 @@
     text-align: center;
 }
 
-/* ── Submit button ──────────────────────────────────────── */
 .pay-btn {
     margin-top: 10px;
     padding: 16px;
@@ -266,7 +282,6 @@
     cursor: not-allowed;
 }
 
-/* ── Success screen ─────────────────────────────────────── */
 .success-screen {
     flex: 1;
     display: flex;
